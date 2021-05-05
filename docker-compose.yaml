@@ -18,3 +18,10 @@ services:
       - ./elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - 127.0.0.1:9200:9200
+
+  # https://github.com/elastic/logstash-docker/blob/master/templates/docker-compose.yml.j2
+  logstash:
+    image: logstash:7.12.1
+    volumes:
+      - "./logstash/pipeline/:/usr/share/logstash/pipeline/"
+      
