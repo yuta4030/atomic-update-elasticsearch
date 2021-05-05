@@ -23,5 +23,23 @@ services:
   logstash:
     image: logstash:7.12.1
     volumes:
-      - "./logstash/pipeline/:/usr/share/logstash/pipeline/"
+      - ./logstash/pipeline/:/usr/share/logstash/pipeline
+      - ./logstash/jars/mysql-connector-java-8.0.24.jar:/usr/share/logstash/mysql-connector-java-8.0.24.jar
+    environment:
+      - XPACK_MONITORING_ENABLED=false
       
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_database
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      TZ: "Asia/Tokyo"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port 3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "127.0.0.1:3306:3306"
